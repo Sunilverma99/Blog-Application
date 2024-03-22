@@ -28,3 +28,21 @@ app.listen(PORT, () => {
 });
 app.use("/api",userRouter)
 app.use("/api",signUpRouter)
+
+
+
+
+
+
+
+
+
+app.use((err,req,res,next)=>{
+     const statusCode=err.statuCode ||500;
+     const message=err.message || "Internal Server Error";
+     res.status({
+      success:false,
+      statusCode:statusCode,
+      message:message,
+     })
+});
