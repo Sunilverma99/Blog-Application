@@ -14,6 +14,7 @@ const signUp=async(req,res,next)=>  {
         res.status(201).json({message:"User registered successfully"});
     }catch(err){
         next(err);
+        console.log(err)
     }
 }
 export {signUp};
