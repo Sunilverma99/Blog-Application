@@ -85,7 +85,7 @@ function Signup() {
       </Button >
       <div className='flex gap-2'>
         <span>Have an account ?</span>
-        <Link to='/sign-in'>Sign in</Link>
+        <Link to='/sign-in'>Sign-in</Link>
       </div>
           </form>
          </div>
