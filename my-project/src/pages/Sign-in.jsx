@@ -3,10 +3,14 @@ import {Label ,TextInput ,Button } from "flowbite-react"
 import { Link } from 'react-router-dom'
 import toast from 'react-hot-toast';
 import { useNavigate } from 'react-router-dom';
+import { setUser } from '../../redux/user/userSlice';
+import {useDispatch } from 'react-redux'
+
 function Signin() {
     const [email,setEmail]=useState('');
     const [password,setPassword]=useState('');
     const navigate=useNavigate();
+    const dispatch=useDispatch();
     console.log(email,password);
     const handleSubmit = async (e) => {
       e.preventDefault(); // Corrected typo here
@@ -31,16 +35,15 @@ function Signin() {
           })
         });
         const data = await res.json();
-        if (data) {
+        if (data.success) {
           toast.success("You are Logged in successfully");
+          dispatch(setUser(data));
           navigate('/');
-        } else {
-          toast.error("Something went wrong please try again");
-          console.log(error);
+        } else{
+          toast.error(data.message||"something went wrong");
         }
       } catch (error) {
-        toast.error("Something went wrong please try again");
-        console.log(error);
+        toast.error(error.message);
       }
     }
     

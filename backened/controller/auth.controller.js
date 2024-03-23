@@ -37,8 +37,8 @@ const signIn = async (req, res, next) => {
         const isMatch = await  bycript.compareSync(password,user.password);
         console.log(isMatch);
         if (!isMatch) {
+            console.log("haryana");
             return next(errHandler(400, "Invalid credentials"));
-            console.log("44")
         }
         const { password: _, ...rest } = user._doc; // Destructure and exclude password from response
         const token = jwt.sign({ id: user._id }, process.env.JWT_TOKEN, { expiresIn: '1h' }); // Set token expiration time

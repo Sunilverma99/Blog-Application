@@ -39,9 +39,9 @@ app.use('/api',signInRouter)
 
 
 app.use((err,req,res,next)=>{
-     const statusCode=err.statuCode ||500;
+     const statusCode=err.statusCode ||500;
      const message=err.message || "Internal Server Error";
-     res.status({
+     res.json({
       success:false,
       statusCode:statusCode,
       message:message,
