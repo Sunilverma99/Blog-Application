@@ -37,7 +37,6 @@ const signIn = async (req, res, next) => {
         const isMatch = await  bycript.compareSync(password,user.password);
         console.log(isMatch);
         if (!isMatch) {
-            console.log("haryana");
             return next(errHandler(400, "Invalid credentials"));
         }
         const { password: _, ...rest } = user._doc; // Destructure and exclude password from response
