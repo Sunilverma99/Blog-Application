@@ -3,10 +3,12 @@ import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { AiOutlineSearch } from 'react-icons/ai';
 import { FaMoon,FaSun } from "react-icons/fa";
 import { useSelector, useDispatch } from 'react-redux';
+import { toggleTheme } from "../../redux/theme/theme.js";
 export default function Header() {
   const path = useLocation().pathname;
-
+ const dispatch=useDispatch();
   const { currentUser } = useSelector((state) => state.user);
+  const { theme } = useSelector((state) => state.theme)
   return (
     <Navbar className='border-b-2 w-screen  px-10'>
   <Link to='/' className=' text-black self-center whitespace-nowrap text-sm sm:text-xl font-semibold dark:text-white'>
@@ -29,8 +31,9 @@ export default function Header() {
       className='w-12 h-10 sm:flex hidden '
       color='gray'
      pill
+     onClick={() => dispatch(toggleTheme())}
     >
-    <FaMoon />
+      {theme === 'light' ? <FaSun /> : <FaMoon />}
     </Button>
    { currentUser?(
       <Dropdown
