@@ -5,6 +5,7 @@ import toast from 'react-hot-toast';
 import { useNavigate } from 'react-router-dom';
 import { setUser } from '../../redux/user/userSlice';
 import {useDispatch } from 'react-redux'
+import OAuth from '../components/OAuth';
 
 function Signin() {
     const [email,setEmail]=useState('');
@@ -77,10 +78,12 @@ function Signin() {
              <Button type='submit' outline  gradientDuoTone="purpleToPink" >
         Sign up
       </Button >
+      <OAuth/>
       <div className='flex gap-2'>
         <span>Have an account ?</span>
         <Link to='/sign-in'>Sign-up</Link>
       </div>
+      
           </form>
          </div>
       </div>

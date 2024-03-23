@@ -3,6 +3,7 @@ import {Label ,TextInput ,Button } from "flowbite-react"
 import { Link } from 'react-router-dom'
 import toast from 'react-hot-toast';
 import { useNavigate } from 'react-router-dom';
+import OAuth from '../components/OAuth';
 function Signup() {
     const[userName,setUserName]=useState('');
     const [email,setEmail]=useState('');
@@ -83,10 +84,12 @@ function Signup() {
              <Button type='submit' outline  gradientDuoTone="purpleToPink" >
         Sign up
       </Button >
+      <OAuth/>
       <div className='flex gap-2'>
         <span>Have an account ?</span>
         <Link to='/sign-in'>Sign-in</Link>
       </div>
+      
           </form>
          </div>
       </div>

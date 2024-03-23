@@ -13,7 +13,11 @@ const userschema=mongoose.Schema({
     password:{
         type:String,
         required:true,  
+    },
+    photoUrl:{
+        type:String,
+        default:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQhOaaBAY_yOcJXbL4jW0I_Y5sePbzagqN2aA&s"
     }
-})
+},{timestamps:true})
 const User=mongoose.model("User",userschema);
 export default User;

@@ -51,4 +51,28 @@ const signIn = async (req, res, next) => {
         next(error);
     }
 };
-export {signUp,signIn};
+
+ const googleLogin= async (req,res,next)=>{
+    try {
+      const user=await User.findOne({email:req.body.email});
+      if(user){
+        const {password:pass,...rest}=user._doc;
+        const token=jwt.sign({id:user._id},process.env.JWT_TOKEN);
+        res.cookie('access_token', token, {secure: true ,httpsOnly: true}).status(200).json(rest);
+      }else{
+        const gereratedPassword=Math.random().toString(36).slice(-8)+Math.random().toString(36).slice(-8);
+        const hashPassword=await bycript.hashSync(gereratedPassword, 10);
+        const newUser=new User({userName:req.body.userName.split(" ").join("").toLowerCase()+Math.random().toString(36).slice(-4),email:req.body.email,password:hashPassword,profilePhoto:req.body.photo})
+        await newUser.save();
+      const {password:pass,...rest}=newUser._doc;
+      const token=jwt.sign({id:newUser._id},process.env.JWT_TOKEN);
+      res.cookie('access_token',token,{ httpsOnly:true}).status(200).json(rest);
+      }
+    } catch (error) {
+      next(error);
+    }
+  
+  }
+
+
+export {signUp,signIn,googleLogin};
