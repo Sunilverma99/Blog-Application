@@ -7,6 +7,7 @@ import Signup from './pages/Signup.jsx'
 import Dashbord from './pages/Dashbored.jsx'
 import Header from './components/Header.jsx';
 import FooterCom from './components/Footer.jsx';
+import PrivateRoute from './components/PrivateRoute.jsx';
 import { Toaster } from 'react-hot-toast';
 function App() {
   return (
@@ -17,7 +18,10 @@ function App() {
        <Route  path="/projects" element={<Projects/>}/>
        <Route  path="/sign-in" element={<Signin/>}/>
        <Route  path="/sign-up" element={<Signup/>}/>
-       <Route  path="/dashbored" element={<Dashbord/>}/>
+       <Route  element={<PrivateRoute/>}>
+       <Route  path="/dashboard" element={<Dashbord/>}/>
+       </Route>
+       
     </Routes>
     <FooterCom/>
     <Toaster/>
