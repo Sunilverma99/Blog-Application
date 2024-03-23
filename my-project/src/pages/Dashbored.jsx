@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useLocation } from 'react-router-dom';
 import DashSidebar from '../components/DashSidebar';
+import DashProfile from '../components/DashProfile';
 
 
 function Dashbored() {
@@ -19,6 +20,7 @@ function Dashbored() {
       <div className='md:w-56'>
         <DashSidebar/>
       </div>
+      {tab==='profile'&& <DashProfile/>}
     </div>
   )
 }
