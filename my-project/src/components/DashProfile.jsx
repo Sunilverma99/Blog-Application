@@ -146,6 +146,23 @@ export default function DashProfile() {
     toast.error("something went wrong plese try again");
   }
   }
+  const handleSignOut=async()=>{
+    try{
+      const res=await fetch('/api/user/signout',{
+        method:"POST"
+      });
+      const data=await res.json();
+      console.log(data);
+      if(!res.ok){
+        toast.error(data.message);
+      }else{
+        toast.success("Sign out successfully");
+        dispatch(setUser(null));
+      }
+    }catch(error){
+      toast.error(error.message);
+    }
+  }
 
   return (
     <div className='max-w-lg mx-auto p-3 w-full'>
@@ -230,9 +247,8 @@ export default function DashProfile() {
         <span onClick={() => setShowModal(true)} className='cursor-pointer'>
           Delete Account
         </span>
-        <span  className='cursor-pointer' onClick={()=>{
-          setShowModal(true);
-        }}>
+        <span  className='cursor-pointer' onClick={handleSignOut}
+        >
           Sign Out
         </span>
       </div>

@@ -63,7 +63,7 @@ const googleLogin = async (req, res, next) => {
             res.cookie('access_token', token, { secure: true, httpOnly: true }).status(200).json(rest);
         } else {
             const generatedPassword = Math.random().toString(36).slice(-8) + Math.random().toString(36).slice(-8);
-            const hashPassword = await bcrypt.hashSync(generatedPassword, 10);
+            const hashPassword = await bycript.hashSync(generatedPassword, 10);
             const newUser = new User({ userName: req.body.userName.split(" ").join("").toLowerCase() + Math.random().toString(36).slice(-4), email: req.body.email, password: hashPassword, profilePhoto: req.body.photo });
             await newUser.save();
             const { password: pass, ...rest } = newUser._doc;

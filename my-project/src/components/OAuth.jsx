@@ -10,52 +10,33 @@ import { Button } from 'flowbite-react';
 export default function OAuth() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const auth = getAuth(app)
 
 
-  const handleGoogleClick = async () => {
-    const provider = new GoogleAuthProvider();
-    const auth = getAuth(app);
+  const handleGoogleClick = async () =>{
+    const provider = new GoogleAuthProvider()
+    provider.setCustomParameters({ prompt: 'select_account' })
     try {
-        const result = await signInWithPopup(auth, provider);
-        console.log(result);
-
-        const config = {
+        const resultsFromGoogle = await signInWithPopup(auth, provider)
+        const res = await fetch('/api/auth/google', {
             method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            credentials: 'include',
+            headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
-                userName: result.user.displayName,
-                email: result.user.email,
-                photoUrl: result.user.photoURL,
+                userName: resultsFromGoogle.user.displayName,
+                email: resultsFromGoogle.user.email,
+                photoURL: resultsFromGoogle.user.photoURL,
             }),
-        };
-        // Ensure the user actually signed in
-        if (result.user) {
-            const res = await fetch('/api/auth/google', config);
-            const data = await res.json();
-            console.log(data);
-
-            if (data.success === false) {
-                toast.error("Please try again");
-                return;
-            }
-
-            dispatch(setUser
-                
-                (data));
-            toast.success("You are logged in successfully")
-            navigate('/');
-        } else {
-            toast.error('Please try again');
-            console.error('User not signed in');
+            })
+        const data = await res.json()
+        if (res.ok){
+            dispatch(setUser(data))
+            navigate('/')
         }
     } catch (error) {
-        console.error('Could not sign in with Google', error);
-        toast.error("Please try again");
+        toast.error("Pleae try again later");
+        console.log(error);
     }
-};
+} 
 
   return (
     <Button onClick={handleGoogleClick} type='button' outline gradientDuoTone="pinkToOrange">

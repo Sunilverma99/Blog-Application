@@ -4,11 +4,33 @@ import { AiOutlineSearch } from 'react-icons/ai';
 import { FaMoon,FaSun } from "react-icons/fa";
 import { useSelector, useDispatch } from 'react-redux';
 import { toggleTheme } from "../../redux/theme/theme.js";
+import { setUser } from '../../redux/user/userSlice.js';
+import toast from 'react-hot-toast';
 export default function Header() {
   const path = useLocation().pathname;
  const dispatch=useDispatch();
   const { currentUser } = useSelector((state) => state.user);
   const { theme } = useSelector((state) => state.theme)
+
+
+  const handleSignOut=async()=>{
+    try{
+      const res=await fetch('/api/user/signout',{
+        method:"POST"
+      });
+      const data=await res.json();
+      console.log(data);
+      if(!res.ok){
+        toast.error(data.message);
+      }else{
+        toast.success("Sign out successfully");
+        dispatch(setUser(null));
+      }
+    }catch(error){
+      toast.error(error.message);
+    }
+  }
+
   return (
     <Navbar className='border-b-2 w-screen  px-10'>
   <Link to='/' className=' text-black self-center whitespace-nowrap text-sm sm:text-xl font-semibold dark:text-white'>
@@ -54,7 +76,7 @@ export default function Header() {
               <Dropdown.Item>Profile</Dropdown.Item>
             </Link>
             <Dropdown.Divider />
-            <Dropdown.Item >Sign out</Dropdown.Item>
+            <Dropdown.Item onClick={handleSignOut} >Sign out</Dropdown.Item>
       </Dropdown>
     ):(<Link to='/sign-in'>
     <button class=" w-13 h-10  relative inline-flex items-center justify-center p-0.5 mb-2 me-2 overflow-hidden text-sm font-medium text-gray-900 rounded-lg group bg-gradient-to-br from-cyan-500 to-blue-500 group-hover:from-cyan-500 group-hover:to-blue-500 hover:text-white dark:text-white focus:ring-4 focus:outline-none focus:ring-cyan-200 dark:focus:ring-cyan-800">
