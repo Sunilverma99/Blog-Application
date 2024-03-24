@@ -25,7 +25,7 @@ const signIn = async (req, res, next) => {
     if (!email || !password) {
         return next(errHandler(400, "All fields are required"));
     }
-    console.log("jello")
+    console.log("hello")
     try {
         const user = await User.findOne({email});
         console.log(user);
@@ -34,17 +34,18 @@ const signIn = async (req, res, next) => {
             console.log("33")
         }
 
-        const isMatch = await  bycript.compareSync(password,user.password);
+        const isMatch = await bycript.compareSync(password, user.password);
         console.log(isMatch);
         if (!isMatch) {
             return next(errHandler(400, "Invalid credentials"));
         }
         const { password: _, ...rest } = user._doc; // Destructure and exclude password from response
-        const token = jwt.sign({ id: user._id }, process.env.JWT_TOKEN, { expiresIn: '1h' }); // Set token expiration time
+        const token = jwt.sign({ id: user._id }, process.env.JWT_TOKEN, { expiresIn: '30d' }); // Set token expiration time to one month
         res.status(200).cookie('access_token', token, {
             httpOnly: true,
             sameSite: 'None',
-            secure: true
+            secure: true,
+            maxAge: 30 * 24 * 60 * 60 * 1000 // Setting cookie expiration time to one month in milliseconds
         }).json(rest); // Send user data as response
     } catch (error) {
         console.log(error);
@@ -52,27 +53,28 @@ const signIn = async (req, res, next) => {
     }
 };
 
- const googleLogin= async (req,res,next)=>{
+
+const googleLogin = async (req, res, next) => {
     try {
-      const user=await User.findOne({email:req.body.email});
-      if(user){
-        const {password:pass,...rest}=user._doc;
-        const token=jwt.sign({id:user._id},process.env.JWT_TOKEN);
-        res.cookie('access_token', token, {secure: true ,httpsOnly: true}).status(200).json(rest);
-      }else{
-        const gereratedPassword=Math.random().toString(36).slice(-8)+Math.random().toString(36).slice(-8);
-        const hashPassword=await bycript.hashSync(gereratedPassword, 10);
-        const newUser=new User({userName:req.body.userName.split(" ").join("").toLowerCase()+Math.random().toString(36).slice(-4),email:req.body.email,password:hashPassword,profilePhoto:req.body.photo})
-        await newUser.save();
-      const {password:pass,...rest}=newUser._doc;
-      const token=jwt.sign({id:newUser._id},process.env.JWT_TOKEN);
-      res.cookie('access_token',token,{ httpsOnly:true}).status(200).json(rest);
-      }
+        const user = await User.findOne({ email: req.body.email });
+        if (user) {
+            const { password: pass, ...rest } = user._doc;
+            const token = jwt.sign({ id: user._id }, process.env.JWT_TOKEN, { expiresIn: '30d' }); // Set token expiration time to one month
+            res.cookie('access_token', token, { secure: true, httpOnly: true }).status(200).json(rest);
+        } else {
+            const generatedPassword = Math.random().toString(36).slice(-8) + Math.random().toString(36).slice(-8);
+            const hashPassword = await bcrypt.hashSync(generatedPassword, 10);
+            const newUser = new User({ userName: req.body.userName.split(" ").join("").toLowerCase() + Math.random().toString(36).slice(-4), email: req.body.email, password: hashPassword, profilePhoto: req.body.photo });
+            await newUser.save();
+            const { password: pass, ...rest } = newUser._doc;
+            const token = jwt.sign({ id: newUser._id }, process.env.JWT_TOKEN, { expiresIn: '30d' }); // Set token expiration time to one month
+            res.cookie('access_token', token, { secure: true, httpOnly: true }).status(200).json(rest);
+        }
     } catch (error) {
-      next(error);
+        next(error);
     }
-  
-  }
+};
+
 
 
 export {signUp,signIn,googleLogin};

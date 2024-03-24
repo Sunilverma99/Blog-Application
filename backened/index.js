@@ -7,11 +7,10 @@ import userRouter from"./routes/user.routes.js"
 import signUpRouter from "./routes/auth.router.js"
 import signInRouter from "./routes/auth.router.js"
 import googleLoginRouter from "./routes/auth.router.js"
+import cors from "cors";
 dotenv.config();
 const PORT = process.env.PORT || 5000;
 const app = express();
-
-console.log(process.env.MONGO);
 
 mongoose.connect(process.env.MONGO, {
   useNewUrlParser: true, 	
@@ -24,6 +23,7 @@ mongoose.connect(process.env.MONGO, {
 
 app.use(express.json());
 app.use(cookieParser());
+app.use(cors());
 
 app.listen(PORT, () => {
   console.log(`Server Running on port ${PORT}`);
