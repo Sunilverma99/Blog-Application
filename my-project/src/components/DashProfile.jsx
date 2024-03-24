@@ -91,7 +91,7 @@ export default function DashProfile() {
       return;
     }
       if (userName.length< 7 ||userName.length > 20) {
-          toast('Username must be between 7 and 20 characters')
+          toast.error('Username must be between 7 and 20 characters')
           return;
         }
       if (userName.includes(' ')) {
