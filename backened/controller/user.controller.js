@@ -12,7 +12,7 @@ const userUpdate=async(req,res,next)=>{
       }
       if (req.body.password) {
         if (req.body.password.length < 6) {
-          return next(err3Handler(400, 'Password must be at least 6 characters'));
+          return next(errHandler(400, 'Password must be at least 6 characters'));
         }
         req.body.password = bycrypt.hashSync(req.body.password, 10);
       }
@@ -24,9 +24,6 @@ const userUpdate=async(req,res,next)=>{
         }
         if (req.body.username.includes(' ')) {
           return next(errHandler(400, 'Username cannot contain spaces'));
-        }
-        if (req.body.username !== req.body.username.toLowerCase()) {
-          return next(errHandler(400, 'Username must be lowercase'));
         }
         if (!req.body.username.match(/^[a-zA-Z0-9]+$/)) {
           return next(

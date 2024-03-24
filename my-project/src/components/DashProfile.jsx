@@ -1,6 +1,7 @@
 import { Alert, Button, Modal, ModalBody, TextInput } from 'flowbite-react';
 import { useEffect, useRef, useState } from 'react';
 import { useSelector } from 'react-redux';
+import { setUser } from '../../redux/user/userSlice.js';
 import {
   getDownloadURL,
   getStorage,
@@ -14,7 +15,7 @@ import 'react-circular-progressbar/dist/styles.css';
 import { useDispatch } from 'react-redux';
 import { HiOutlineExclamationCircle } from 'react-icons/hi';
 import { Link } from 'react-router-dom';
-
+import toast from 'react-hot-toast';
 export default function DashProfile() {
   const { currentUser } = useSelector((state) => state.user);
   const [imageFile, setImageFile] = useState(null);
@@ -25,7 +26,10 @@ export default function DashProfile() {
   const [updateUserSuccess, setUpdateUserSuccess] = useState(null);
   const [updateUserError, setUpdateUserError] = useState(null);
   const [showModal, setShowModal] = useState(false);
-  const [formData, setFormData] = useState({});
+  const[userName,setUserName]=useState(currentUser.userName);
+  const[email,setEmail]=useState(currentUser.email);
+  const[password,setPassword]=useState('');
+  const[photoUrl,setPhotoUrl]=useState(currentUser.photoUrl);
   const filePickerRef = useRef();
   const dispatch = useDispatch();
   const handleImageChange = (e) => {
@@ -38,6 +42,7 @@ export default function DashProfile() {
   useEffect(() => {
     if (imageFile) {
       uploadImage();
+      console.log("hello");
     }
   }, [imageFile]);
 
@@ -69,54 +74,62 @@ export default function DashProfile() {
       () => {
         getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
           setImageFileUrl(downloadURL);
-          setFormData({ ...formData, profilePicture: downloadURL });
+          setPhotoUrl(downloadURL);
           setImageFileUploading(false);
         });
       }
     );
   };
 
-  const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.id]: e.target.value });
-  };
-
   const handleSubmit = async (e) => {
     e.preventDefault();
     setUpdateUserError(null);
     setUpdateUserSuccess(null);
-    if (Object.keys(formData).length === 0) {
-      setUpdateUserError('No changes made');
+ console. log(userName ,email,password ,photoUrl)
+    if(userName===currentUser.userName&& email===currentUser.email&&password===currentUser.password&& photoUrl===currentUser.photoUrl){
+      toast.error("Nothing is changed");
       return;
     }
+      if (userName.length< 7 ||userName.length > 20) {
+          toast('Username must be between 7 and 20 characters')
+          return;
+        }
+      if (userName.includes(' ')) {
+        toast.error('Username cannot contain spaces');
+        return;
+      }
+      if (!userName.match(/^[a-zA-Z0-9]+$/)) {
+        toast.error(
+       'Username can only contain letters and numbers')
+       return;
+      }
     if (imageFileUploading) {
-      setUpdateUserError('Please wait for image to upload');
+      toast.error('Please wait for image to upload');
       return;
     }
     try {
-      dispatch(updateStart());
       const res = await fetch(`/api/user/update/${currentUser._id}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(formData),
+        body: JSON.stringify({userName,email,password,photoUrl}),
       });
       const data = await res.json();
+       dispatch(setUser(data));
       if (!res.ok) {
-        dispatch(updateFailure(data.message));
         setUpdateUserError(data.message);
       } else {
-        dispatch(updateSuccess(data));
         setUpdateUserSuccess("User's profile updated successfully");
+        toast.success("User's profile updated successfully")
       }
     } catch (error) {
-      dispatch(updateFailure(error.message));
       setUpdateUserError(error.message);
+      toast.error(error.message);
     }
   };
 
 
- 
   return (
     <div className='max-w-lg mx-auto p-3 w-full'>
       <h1 className='my-7 text-center font-semibold text-3xl'>Profile</h1>
@@ -124,9 +137,9 @@ export default function DashProfile() {
         <input
           type='file'
           accept='image/*'
-          onChange={handleImageChange}
           ref={filePickerRef}
           hidden
+          onChange={handleImageChange}
         />
         <div
           className='relative w-32 h-32 self-center cursor-pointer shadow-md overflow-hidden rounded-full'
@@ -171,21 +184,21 @@ export default function DashProfile() {
           id='username'
           placeholder='username'
           defaultValue={currentUser.userName}
-          
+          onChange={(e)=>{setUserName(e.target.value)}}
         />
         <TextInput
           type='email'
           id='email'
           placeholder='email'
           defaultValue={currentUser.email}
-          
+          onChange={(e)=>{setEmail(e.target.value)}}
         />
         <TextInput
           type='password'
           id='password'
           placeholder='password'
           defaultValue="*******"
-       
+          onChange={(e)=>{(setPassword(e.target.value))}}
         />
         <Button
           type='submit'
@@ -195,16 +208,6 @@ export default function DashProfile() {
         >
            Update
         </Button>
-       
-          <Link to={'/create-post'}>
-            <Button
-              type='button'
-              gradientDuoTone='purpleToPink'
-              className='w-full'
-            >
-              Create a post
-            </Button>
-          </Link>
       </form>
       <div className='text-red-500 flex justify-between mt-5'>
         <span onClick={() => setShowModal(true)} className='cursor-pointer'>

@@ -39,8 +39,9 @@ export default function Header() {
       <Dropdown
       arrowIcon={false}
       inline
+
       label={
-        <Avatar alt='user' className='w-6 h-6' img={currentUser.profilePhoto} rounded />
+        <Avatar alt='user' className='w-12 h-6' img={currentUser.photoUrl} rounded />
       }
       >
        <Dropdown.Header>

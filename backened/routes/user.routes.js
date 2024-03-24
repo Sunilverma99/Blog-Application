@@ -4,5 +4,5 @@ import { verifyToken } from '../utlies/userverify.js';
 const router =express.Router();
 
 router.get('/user',user);
-router.put('/update/:id',verifyToken,userUpdate);
+router.put('/user/update/:id',verifyToken,userUpdate);
 export default router;
