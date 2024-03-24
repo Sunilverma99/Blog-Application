@@ -8,6 +8,8 @@ import Dashbord from './pages/Dashbored.jsx'
 import Header from './components/Header.jsx';
 import FooterCom from './components/Footer.jsx';
 import PrivateRoute from './components/PrivateRoute.jsx';
+import OnlyAdminPrivateRoute from "./components/OnlyAdminPrivateRoute .jsx";
+import CreatePost from './pages/CreatePost.jsx';
 import { Toaster } from 'react-hot-toast';
 function App() {
   return (
@@ -21,7 +23,9 @@ function App() {
        <Route  element={<PrivateRoute/>}>
        <Route  path="/dashboard" element={<Dashbord/>}/>
        </Route>
-       
+       <Route  element={<OnlyAdminPrivateRoute/>}>
+       <Route  path="/create-post" element={<CreatePost/>}/>
+       </Route>
     </Routes>
     <FooterCom/>
     <Toaster/>
