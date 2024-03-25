@@ -1,8 +1,60 @@
 import { Select, TextInput,FileInput,Button } from 'flowbite-react'
 import React from 'react'
+import {
+  getDownloadURL,
+  getStorage,
+  ref,
+  uploadBytesResumable,
+} from 'firebase/storage';
+import { CircularProgressbar } from 'react-circular-progressbar';
+import 'react-circular-progressbar/dist/styles.css';
+import { app } from '../../firebase';
+import toast from 'react-hot-toast';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
+import { useState } from 'react';
 export default function CreatePost() {
+  const[files,setFiles]=useState([]);
+  const[imageUpload,setImageUpload]=useState(false);
+  const[imageUploadProgress,setImageUploadPorgress]=useState(null);
+  const[imageUploadError,setImageUploadError]=useState(null);
+  const [imageUrl,setImageUrl]=useState(null);
+  const [imageIspresent,setImageIsPresent]=useState(false);
+  const handleImageUpload=async()=>{
+    setImageUpload(true);
+    if(!imageUrl){setImageIsPresent(false)}
+    setImageUploadError(null);
+    const storage = getStorage(app);
+    const fileName = new Date().getTime() + files.name;
+    const storageRef = ref(storage,fileName);
+    const uploadTask = uploadBytesResumable(storageRef,files);
+    uploadTask.on('state_changed',
+    (snapshot) => {
+      const progress =
+        (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+      setImageUploadPorgress(progress.toFixed(0));
+      console.log(progress.toFixed(0));
+    },(error) => {
+      setImageUpload(false);
+      toast.error("Image upload failed");
+      setImageUploadError(
+        'Image upload failed (File must be less than 2MB))'
+      );
+      setImageUploadPorgress(null);
+      setImageUrl(null);
+      setFiles(null);
+      setImageUpload(false);
+    },()=>{
+      getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+        toast.success("Image uploaded successfully");
+        setImageUrl(downloadURL);
+        setImageUpload(false);
+        setImageIsPresent(true);
+        console.log(downloadURL)
+      });
+    } );
+    
+  }
   return (
     <div className='p-3 max-w-3xl mx-auto min-h-screen'>
     <h1 className='text-center text-3xl my-7 font-semibold'>Create a post</h1>
@@ -27,16 +79,30 @@ export default function CreatePost() {
         <FileInput
           type='file'
           accept='image/*'
+          onChange={(e)=>setFiles(e.target.files[0])}
         />
         <Button
           type='button'
           gradientDuoTone='purpleToBlue'
           size='sm'
           outline
-        >
-          Upload image
+          onClick={handleImageUpload}
+        >{
+          imageUpload?(
+           
+            <div className='flex  w-10 h-10 items-center'>
+              <CircularProgressbar
+              value={imageUploadProgress||0}
+              text={`${imageUploadProgress}%`}
+              strokeWidth={5}/>
+            </div>
+          ):( "Upload " )
+        }
         </Button>
       </div>
+      {imageIspresent && (
+        <img src={imageUrl} alt="postImage" className='w-full h-72 object-cover rounded-lg border-teal-600 border-4'/>
+      )}
       
       <ReactQuill
         theme='snow'

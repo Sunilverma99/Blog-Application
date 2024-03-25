@@ -76,6 +76,7 @@ export default function DashProfile() {
           setImageFileUrl(downloadURL);
           setPhotoUrl(downloadURL);
           setImageFileUploading(false);
+          console.log(downloadURL);
         });
       }
     );
