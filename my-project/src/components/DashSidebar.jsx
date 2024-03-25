@@ -3,7 +3,7 @@ import { useDispatch,useSelector } from 'react-redux';
 import { useState } from 'react';
 import { useEffect } from 'react';
 import { Sidebar } from 'flowbite-react';
-import { HiArrowSmRight, HiChartPie, HiUser } from 'react-icons/hi';
+import { HiArrowSmRight, HiChartPie, HiDocumentText, HiUser } from 'react-icons/hi';
 import { Link } from 'react-router-dom';
 import { setUser } from '../../redux/user/userSlice';
 import toast from 'react-hot-toast';
@@ -45,15 +45,26 @@ export default function DashSidebar() {
           <Sidebar.Item href="#" icon={HiChartPie}>
             Dashboard
           </Sidebar.Item>
+          
           <Link to='/dashboard?tab=profile'>
             <Sidebar.Item
               active={tab === 'profile'}
               icon={HiUser}
-              label= 'User'
+              label= {currentUser.isAdmin ?"Admin":"User"}
               labelColor='dark'
               as='div'
             >
               Profile
+            </Sidebar.Item>
+          </Link>
+          <Link to='/dashboard?tab=posts'>
+            <Sidebar.Item
+              active={tab === 'posts'}
+              icon={HiDocumentText}
+              labelColor='dark'
+              as='div'
+            >
+              Posts
             </Sidebar.Item>
           </Link>
  
