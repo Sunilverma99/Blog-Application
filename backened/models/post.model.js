@@ -9,6 +9,10 @@ const postSchema=mongoose.Schema({
         required:true,
         unique:true
     },
+    category:{
+       type:String,
+       default:"uncategorized"
+    },
     content:{
         type:String,
         requried:true

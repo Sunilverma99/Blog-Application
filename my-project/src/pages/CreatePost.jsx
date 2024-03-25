@@ -1,5 +1,6 @@
 import { Select, TextInput,FileInput,Button } from 'flowbite-react'
 import React from 'react'
+import { useNavigate } from 'react-router-dom';
 import {
   getDownloadURL,
   getStorage,
@@ -13,13 +14,17 @@ import toast from 'react-hot-toast';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 import { useState } from 'react';
+import { useDispatch } from 'react-redux';
 export default function CreatePost() {
   const[files,setFiles]=useState([]);
+  const[formData,setFormData]=useState({});
   const[imageUpload,setImageUpload]=useState(false);
   const[imageUploadProgress,setImageUploadPorgress]=useState(null);
   const[imageUploadError,setImageUploadError]=useState(null);
   const [imageUrl,setImageUrl]=useState(null);
   const [imageIspresent,setImageIsPresent]=useState(false);
+ const navigate=useNavigate();
+
   const handleImageUpload=async()=>{
     setImageUpload(true);
     if(!imageUrl){setImageIsPresent(false)}
@@ -48,6 +53,7 @@ export default function CreatePost() {
       getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
         toast.success("Image uploaded successfully");
         setImageUrl(downloadURL);
+        setFormData({...formData,photoUrl:downloadURL})
         setImageUpload(false);
         setImageIsPresent(true);
         console.log(downloadURL)
@@ -55,10 +61,35 @@ export default function CreatePost() {
     } );
     
   }
+  const handleSubmit=async(e)=>{
+    e.preventDefault();
+    if(!formData.title){
+      return toast.error("Please fill all the fiels");
+    }
+    try {
+      const res=await fetch("/api/post/create",{
+        method:"POST",
+        headers:{
+          "Content-Type":"application/json"
+        },
+        body:JSON.stringify(formData)
+      })
+      const data=await res.json();
+      console.log(data);
+      if(data.success||res.ok||res.status===201){
+        toast.success("Post created successfully");
+         navigate(`post/${data.slag}`);
+      }else{
+        toast.error("Failed to create a posit");
+      }
+    } catch (error) {
+      toast.error("Failed to create a post");
+    }
+  }
   return (
     <div className='p-3 max-w-3xl mx-auto min-h-screen'>
     <h1 className='text-center text-3xl my-7 font-semibold'>Create a post</h1>
-    <form className='flex flex-col gap-4' >
+    <form onSubmit={handleSubmit} className='flex flex-col gap-4' >
       <div className='flex flex-col gap-4 sm:flex-row justify-between'>
         <TextInput
           type='text'
@@ -66,8 +97,11 @@ export default function CreatePost() {
           required
           id='title'
           className='flex-1'
+          onChange={(e)=>setFormData({...formData,title:e.target.value})}
         />
         <Select
+        id='category'
+        onChange={(e)=>setFormData({...formData,category:e.target.value})}
         >
           <option value='uncategorized'>Select a category</option>
           <option value='javascript'>JavaScript</option>
@@ -109,6 +143,7 @@ export default function CreatePost() {
         placeholder='Write something...'
         className='h-72 mb-12'
         required
+        onChange={(value)=>setFormData({...formData,content:value})}
       />
       <Button type='submit' gradientDuoTone='purpleToPink'>
         Publish
