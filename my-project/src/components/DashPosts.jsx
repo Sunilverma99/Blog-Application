@@ -46,7 +46,7 @@ export default function YourComponent() {
                 </Table.Head>
                 {posts.map((post) => (
               <Table.Body key={post._id} className='divide-y'>
-                <Table.Row className='bg-white dark:border-gray-700 dark:bg-gray-800'>
+                <Table.Row className='bg-white dark:border-gray-700 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700'>
                   <Table.Cell>
                   {new Date(post.updatedAt).toLocaleDateString()}
                   </Table.Cell>
