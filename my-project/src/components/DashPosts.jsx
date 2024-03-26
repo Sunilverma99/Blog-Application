@@ -2,10 +2,11 @@ import React, { useEffect, useState } from 'react';
 import { Table } from 'flowbite-react'; // Assuming you have a Table component
 import { useSelector } from 'react-redux';
 import {Link } from 'react-router-dom'
-
+import toast from 'react-hot-toast';
 export default function YourComponent() {
     const {currentUser} = useSelector((state) => state.user);
     const [posts, setPosts] = useState([]);
+    const[showMore,setShowMore]=useState(false);
     console.log(posts)
     useEffect(() => {
       const fetchPosts = async () => {
@@ -17,6 +18,10 @@ export default function YourComponent() {
                   });
                   const data = await response.json();
                   if (response.ok) {
+                    if(posts.length<9){
+                      setShowMore(false);
+                    }
+                    setShowMore(true)
                       setPosts(data.posts);
                   }
               } else {
@@ -30,7 +35,27 @@ export default function YourComponent() {
       fetchPosts();
   }, [currentUser._id]); // Add currentUser as a dependency to re-run the effect when it changes
   
-
+  const handleShowMore= async()=>{
+      setShowMore(false);
+      try {
+        const res=await fetch(`/api/post/posts?userId=${currentUser._id}&startIndex=${posts.length}`,{
+          method:"GET"
+        })
+        const data= await res.json();
+        console.log(data);
+        if(res.ok){
+          if(data.posts.length<9){
+            setShowMore(false);
+          }else{
+            setShowMore(true)
+          }
+          setPosts([...posts,...data.posts]);
+          
+        }
+      }catch(error){
+         toast.error('Failed to Load More Posts')
+      }
+  }
     return (
         <div className="overflow-x-auto mx-auto w-full p-2">
             <Table >
@@ -87,6 +112,9 @@ export default function YourComponent() {
               </Table.Body>
             ))}
             </Table>
+            {
+              showMore && <button onClick={(handleShowMore)} className='text-teal-500 text-sm  rounded-lg px-3  flex justify-center mx-auto'>Show More </button>
+            }
         </div>
     );
 }
