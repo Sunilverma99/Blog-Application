@@ -4,6 +4,7 @@ import { useLocation } from 'react-router-dom';
 import DashSidebar from '../components/DashSidebar';
 import DashProfile from '../components/DashProfile';
 import DashPosts from '../components/DashPosts.jsx'
+import DashUsers from '../components/DashUsers.jsx';
 
 function Dashbored() {
   const location=useLocation();
@@ -21,7 +22,8 @@ function Dashbored() {
         <DashSidebar/>
       </div>
       {tab==='profile'&& <DashProfile/>||
-      tab==='posts'&& <DashPosts/>}
+      tab==='posts'&& <DashPosts/>||
+      tab==='users'&&<DashUsers/>}
 
     </div>
   )

@@ -53,7 +53,7 @@ const userUpdate=async(req,res,next)=>{
     
 
     const userDelete = async (req, res, next) => {
-      if (req.user.id !== req.params.id) {
+      if (!req.user.isAdmin&&req.user.id !== req.params.id) {
         return next(errHandler(403, "You are not allowed to delete this user"));
       }
       try {
@@ -80,9 +80,7 @@ const userUpdate=async(req,res,next)=>{
         const startIndex = parseInt(req.query.startIndex) || 0;
         const limit = parseInt(req.query.limit) || 9;
         const sortDirection = req.query.order === 'asc' ? 1 : -1;
-        const allUsers=await User.find() .sort({ updatedAt: sortDirection })
-        .skip(startIndex)
-        .limit(limit);
+        const allUsers=await User.find() .sort({ updatedAt: sortDirection }).skip(startIndex).limit(limit);
         const totalUsers=await User.countDocuments();
         const now=new Date();
         const oneMonthAgo = new Date(

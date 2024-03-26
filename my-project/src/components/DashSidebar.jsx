@@ -57,6 +57,7 @@ export default function DashSidebar() {
               Profile
             </Sidebar.Item>
           </Link>
+        {  currentUser.isAdmin&&
           <Link to='/dashboard?tab=posts'>
             <Sidebar.Item
               active={tab === 'posts'}
@@ -67,7 +68,22 @@ export default function DashSidebar() {
               Posts
             </Sidebar.Item>
           </Link>
- 
+          
+}        
+{  currentUser.isAdmin&&
+          <Link to='/dashboard?tab=users'>
+            <Sidebar.Item
+              active={tab === 'users'}
+              icon={HiDocumentText}
+              labelColor='dark'
+              as='div'
+            >
+              Users
+            </Sidebar.Item>
+          </Link>
+          
+}        
+
           <Sidebar.Item  icon={HiArrowSmRight}
             className='cursor-pointer' onClick={handleSignOut}>
               
