@@ -81,6 +81,7 @@ const deletePost=async(req,res,next)=>{
   }
 }
 const updatePost=async(req,res,next)=>{
+  console.log(req.body);
    if(!req.user.isAdmin||req.params.userId!==req.user.id){
     return next(errHandler(401,"You are not allowed to update post"));
    }

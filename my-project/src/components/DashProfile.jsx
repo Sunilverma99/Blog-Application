@@ -14,7 +14,7 @@ import 'react-circular-progressbar/dist/styles.css';
 
 import { useDispatch } from 'react-redux';
 import { HiOutlineExclamationCircle } from 'react-icons/hi';
-import { Link } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import toast from 'react-hot-toast';
 export default function DashProfile() {
   const { currentUser } = useSelector((state) => state.user);
