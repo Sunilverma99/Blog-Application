@@ -10,6 +10,7 @@ import FooterCom from './components/Footer.jsx';
 import PrivateRoute from './components/PrivateRoute.jsx';
 import OnlyAdminPrivateRoute from "./components/OnlyAdminPrivateRoute .jsx";
 import CreatePost from './pages/CreatePost.jsx';
+import UpdatePost from './pages/UpdatePost.jsx';
 import { Toaster } from 'react-hot-toast';
 function App() {
   return (
@@ -25,6 +26,7 @@ function App() {
        </Route>
        <Route  element={<OnlyAdminPrivateRoute/>}>
        <Route  path="/create-post" element={<CreatePost/>}/>
+       <Route path ="/update-post/:id" element={<UpdatePost/>}/>
        </Route>
     </Routes>
     <FooterCom/>

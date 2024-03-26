@@ -80,4 +80,27 @@ const deletePost=async(req,res,next)=>{
     next(error);
   }
 }
-export {createPost,getposts,deletePost}
+const updatePost=async(req,res,next)=>{
+   if(!req.user.isAdmin||req.params.userId!==req.user.id){
+    return next(errHandler(401,"You are not allowed to update post"));
+   }
+   if(req.body.title==""||req.body.content==""||!req.body.title||!req.body.content){
+    return next(errHandler(400,"Title and content are required to update post"));
+   }
+   const slag=req.body.title.toLowerCase().split(" ").join("-").replace(/[^a-zA-Z0-9-]/g,"");
+   const post={
+    ...req.body,
+    slag:slag,
+    userId:req.user.id
+   }
+   try{
+    const updatedPost=await Post.findByIdAndUpdate(req.params.postId,{ $set:post},{new:true});
+    if(!updatedPost){
+      return next(errHandler(404,"Post not found"));
+    }
+    res.status(200).json(updatedPost);
+   }catch(error){
+    next(error);
+   }
+}
+export {createPost,getposts,deletePost ,updatePost}
