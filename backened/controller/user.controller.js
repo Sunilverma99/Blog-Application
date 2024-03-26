@@ -75,4 +75,33 @@ const userUpdate=async(req,res,next)=>{
       }
     };
     
-export {user,userUpdate,userDelete,userSignOut};
+    const getUsers=async(req,res,next)=>{
+      try {
+        const startIndex = parseInt(req.query.startIndex) || 0;
+        const limit = parseInt(req.query.limit) || 9;
+        const sortDirection = req.query.order === 'asc' ? 1 : -1;
+        const allUsers=await User.find() .sort({ updatedAt: sortDirection })
+        .skip(startIndex)
+        .limit(limit);
+        const totalUsers=await User.countDocuments();
+        const now=new Date();
+        const oneMonthAgo = new Date(
+          now.getFullYear(),
+          now.getMonth() - 1,
+          now.getDate()
+        );
+        const lastMonthUsers = await User.countDocuments({
+          createdAt: { $gte: oneMonthAgo },
+        });
+        res.status(200).json({
+          allUsers,
+          totalUsers,
+          lastMonthUsers
+        })
+
+      } catch (error) {
+        console.log(error);
+        next(error);
+      }
+    }
+export {user,userUpdate,userDelete,userSignOut,getUsers};
