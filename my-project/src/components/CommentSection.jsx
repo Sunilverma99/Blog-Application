@@ -37,6 +37,29 @@ export default function Comment({postId,currentUser}) {
         toast.error("Pleae try again Later");
     }
   }
+  const handleLikes=async({comment})=>{
+     try {
+      console.log(comment)
+       const res=await fetch(`/api/comment/countLikes/${comment._id}`,{
+        method:"PUT",
+        headers:{
+          "Content-Type":"application/json"
+        },
+         body:JSON.stringify({
+           comment
+         })
+       })
+       const data=await res.json();
+       if(res.ok){
+        console.log(data);
+        setComments(comments.map((c)=>c._id===comment._id?data:c))
+       }
+      
+     } catch (error) {
+       console.log(error);
+       toast.error("You can not like this comment")
+     }
+  }
   useEffect(()=>{
     const fetchComments=async()=>{
       try {
@@ -107,9 +130,9 @@ export default function Comment({postId,currentUser}) {
           </div>
         </div>
         {comments.length>0?(comments.map((comment)=>(
-          <Comments key={comment._id} comment={comment}/>
+          <Comments key={comment._id} comment={comment} LikeComment={handleLikes}/>
         ))
-          ):(<p></p>)}
+          ):(<p>No comment yet</p>)}
         </>
       )}
       </div>

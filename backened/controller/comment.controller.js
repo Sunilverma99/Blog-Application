@@ -31,22 +31,24 @@ const getAllComments=async(req,res,next)=>{
   }
 }
 
-const countLikes=async(req,res,next)=>{
-  if(req.user.id!==req.params.commentId){
-    return next(errHandler(403,"First Please login"))
-  }
-  try{
-    const comment=await Comment.findById(req.user.id);
-      const index=comment.likes.findIndex((id)=>id===String(req.user.id));
-       if(index===-1){
-        comment.numberOfLikes+=1;
-        comment.likes.push(req.user.id);
-       }else{
-        comment.numberOfLikes-=1;
-        comment.likes=comment.likes.filter((id)=>id!==String(req.user.id))
-       }
-  }catch(error){
+ const likeComment = async (req, res, next) => {
+  try {
+    const comment = await Comment.findById(req.params.commentId);
+    if (!comment) {
+      return next(errHandler(404, 'Comment not found'));
+    }
+    const userIndex = comment.likes.indexOf(req.user.id);
+    if (userIndex === -1) {
+      comment.numberOfLikes += 1;
+      comment.likes.push(req.user.id);
+    } else {
+      comment.numberOfLikes -= 1;
+      comment.likes.splice(userIndex, 1);
+    }
+    await comment.save();
+    res.status(200).json(comment);
+  } catch (error) {
     next(error);
   }
-}
-export {createComment,getAllComments,countLikes};
+};
+export {createComment,getAllComments,likeComment};

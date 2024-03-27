@@ -1,8 +1,11 @@
 
 import React, { useEffect, useState } from 'react'
 import moment from 'moment';
-export default function Comments({comment}) {
+import { BiSolidLike } from "react-icons/bi";
+import { useSelector } from 'react-redux';
+export default function Comments({comment,LikeComment}) {
     const[user,setUser]=useState(null);
+    const{currentUser}=useSelector((state)=>state.user);
 useEffect(()=>{
     const fetchCommentUser=async()=>{
         const res=await fetch(`/api/getUser/${comment.userId}`);
@@ -33,6 +36,16 @@ useEffect(()=>{
         </span>
       </div>
       <p className='text-gray-500 pb-2'>{comment.comment}</p>
+      <div className='flex items-center border-t-2  border-gray-200 dark:border-gray-700 p-1 gap-1'>
+        <button className='p-2' onClick={()=>LikeComment({comment})}> <BiSolidLike className={`text-gray-400 hover:text-blue-500 ${
+                  currentUser &&
+                  comment.likes.includes(currentUser._id) &&
+                  '!text-blue-500'
+                }`} /></button>
+     
+      {comment.numberOfLikes<2?(<p className=' text-xs text-gray-400'>{comment.numberOfLikes+" "} like</p>):(<p className=' text-xs text-gray-400'>{comment.numberOfLikes+" "} likes</p>)}
+      </div>
+     
       </div>
       
       </div>
