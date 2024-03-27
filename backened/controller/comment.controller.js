@@ -24,12 +24,29 @@ const createComment=async(req,res,next)=>{
 }
 const getAllComments=async(req,res,next)=>{
   try{
-    console.log(req.params.postId)
   const comments=await Comment.find({postId:req.params.postId});
-   console.log(comments)
       res.status(200).json(comments);
   }catch(error){
     next(error);
   }
 }
-export {createComment,getAllComments};
+
+const countLikes=async(req,res,next)=>{
+  if(req.user.id!==req.params.commentId){
+    return next(errHandler(403,"First Please login"))
+  }
+  try{
+    const comment=await Comment.findById(req.user.id);
+      const index=comment.likes.findIndex((id)=>id===String(req.user.id));
+       if(index===-1){
+        comment.numberOfLikes+=1;
+        comment.likes.push(req.user.id);
+       }else{
+        comment.numberOfLikes-=1;
+        comment.likes=comment.likes.filter((id)=>id!==String(req.user.id))
+       }
+  }catch(error){
+    next(error);
+  }
+}
+export {createComment,getAllComments,countLikes};

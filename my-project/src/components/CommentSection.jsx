@@ -1,11 +1,13 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Label, Textarea,Button } from "flowbite-react";
 import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import toast from 'react-hot-toast';
+import Comments from './Comments.jsx';
 export default function Comment({postId,currentUser}) {
     const[comment,setComment]=useState('');
     const[commentError,setCommentError]=useState(null);
+    const[comments,setComments]=useState([]);
   const handleSubmit=async(e)=>{
     e.preventDefault();
     if(comment.length<1){
@@ -35,6 +37,23 @@ export default function Comment({postId,currentUser}) {
         toast.error("Pleae try again Later");
     }
   }
+  useEffect(()=>{
+    const fetchComments=async()=>{
+      try {
+       const res=await fetch(`/api/comment/getAllComments/${postId}`,{
+         method:"GET",
+       });
+       const data=await res.json();
+       if(res.ok){
+         setComments(data);
+       }
+      } catch (error) {
+        console.log(error);
+        toast.error("Please try again Later");
+      }
+    }
+    fetchComments();
+ },[postId])
   return (
     <div className='max-w-2xl mx-auto w-full p-3'>
       {currentUser ? (
@@ -61,6 +80,7 @@ export default function Comment({postId,currentUser}) {
         </div>
       )}
       {currentUser && (
+        <>
         <form
           onSubmit={handleSubmit}
           className='border border-teal-500 rounded-md p-3'
@@ -80,8 +100,17 @@ export default function Comment({postId,currentUser}) {
               Submit
             </Button>
           </div>
-          
         </form>
+        <div>
+          <div>
+            <img src="" alt="" />
+          </div>
+        </div>
+        {comments.length>0?(comments.map((comment)=>(
+          <Comments key={comment._id} comment={comment}/>
+        ))
+          ):(<p></p>)}
+        </>
       )}
       </div>
   )

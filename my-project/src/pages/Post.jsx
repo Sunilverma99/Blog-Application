@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { useParams,Link } from 'react-router-dom';
 import WebsiteAdds from '../components/WebsiteAdds.jsx';
 import { Spinner,Button } from 'flowbite-react';
-import CommentSection from '../components/Comment.jsx'
+import CommentSection from '../components/CommentSection.jsx'
 import { useSelector } from 'react-redux';
 export default function Post() {
    const{currentUser}=useSelector((state)=>state.user);
