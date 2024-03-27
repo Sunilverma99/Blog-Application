@@ -36,7 +36,7 @@ function Signin() {
           })
         });
         const data = await res.json();
-        if (data.statusCode===200||data.success||res.status==200) {
+        if (res.statusCode==200) {
           toast.success("You are Logged in successfully");
           dispatch(setUser(data));
           navigate('/');

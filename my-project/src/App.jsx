@@ -12,6 +12,7 @@ import OnlyAdminPrivateRoute from "./components/OnlyAdminPrivateRoute .jsx";
 import CreatePost from './pages/CreatePost.jsx';
 import UpdatePost from './pages/UpdatePost.jsx';
 import { Toaster } from 'react-hot-toast';
+import Post from './pages/Post.jsx';
 function App() {
   return (
     <BrowserRouter>
@@ -28,6 +29,7 @@ function App() {
        <Route  path="/create-post" element={<CreatePost/>}/>
        <Route path ="/update-post/:postId" element={<UpdatePost/>}/>
        </Route>
+       <Route path='/post/:slag' element={<Post/>} />
     </Routes>
     <FooterCom/>
     <Toaster/>
