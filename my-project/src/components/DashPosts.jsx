@@ -3,11 +3,10 @@ import { Button, Table,Modal } from 'flowbite-react'; // Assuming you have a Tab
 import { useSelector } from 'react-redux';
 import {Link } from 'react-router-dom'
 import toast from 'react-hot-toast';
-
-
 import { HiOutlineExclamationCircle } from 'react-icons/hi';
 export default function DashPosts() {
     const {currentUser} = useSelector((state) => state.user);
+    console.log(currentUser)
     const [posts, setPosts] = useState([]);
     const[showMore,setShowMore]=useState(false);
     const[showModal,setShowModal]=useState(false);

@@ -2,13 +2,17 @@ import React, { useEffect, useState } from 'react'
 import { useParams,Link } from 'react-router-dom';
 import WebsiteAdds from '../components/WebsiteAdds.jsx';
 import { Spinner,Button } from 'flowbite-react';
+import CommentSection from '../components/Comment.jsx'
+import { useSelector } from 'react-redux';
 export default function Post() {
+   const{currentUser}=useSelector((state)=>state.user);
+   //console.log(currentUser);
     const[loading,setLoading]=useState(false);
     const[post,setPost]=useState(null);
     const[recentPosts,setRecentPosts]=useState([]);
     const[error,setError]=useState(false);
     const {slag}=useParams();
-
+    console.log()
     useEffect(()=>{
         const fetchPost=async()=>{
             setLoading(true);
@@ -18,7 +22,6 @@ export default function Post() {
                 if(res.ok){
                     setLoading(false)
                     setPost(data.posts[0]);
-                    console.log(data)
                     console.log(data.posts[0])
                 }
             }catch(error){
@@ -68,7 +71,7 @@ export default function Post() {
 
           </div>
            <div><WebsiteAdds/></div>
-         
+           <CommentSection currentUser={currentUser} postId={post&&post._id}/>
 
     
           {/* <div className='flex flex-col justify-center items-center mb-5'>

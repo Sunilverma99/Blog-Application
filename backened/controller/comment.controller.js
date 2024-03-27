@@ -1,16 +1,21 @@
 import Comment from "../models/comments.model.js"
 import errHandler from "../utlies/error.js"
 const createComment=async(req,res,next)=>{
-    if(!req.user._id!=req.body.userId){
-        return next(errHandler(401,"You are not authorized to comment on this post"))
+    const { comment, postId, userId } = req.body;
+
+    if (userId !== req.user.id) {
+      return next(
+        errHandler(403, 'You are not allowed to create this comment')
+      );
     }
+
     try {
-        const comment=new Comment({
-            userId:req.body.userId,
-            postId:req.body.postId,
-            comment:req.body.comment
+        const Content=new Comment({
+           userId,
+           postId,
+           comment
         })
-        await comment.save();
+        await Content.save();
         res.status(201).json(comment);
     } catch (error) {
         next(error);
