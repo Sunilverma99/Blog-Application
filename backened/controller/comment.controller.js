@@ -1,5 +1,6 @@
 import Comment from "../models/comments.model.js"
 import errHandler from "../utlies/error.js"
+import { ObjectId } from "mongoose";
 const createComment=async(req,res,next)=>{
     const { comment, postId, userId } = req.body;
 
@@ -21,4 +22,14 @@ const createComment=async(req,res,next)=>{
         next(error);
     }  
 }
-export {createComment};
+const getAllComments=async(req,res,next)=>{
+  try{
+    console.log(req.params.postId)
+  const comments=await Comment.find({postId:req.params.postId});
+   console.log(comments)
+      res.status(200).json(comments);
+  }catch(error){
+    next(error);
+  }
+}
+export {createComment,getAllComments};
