@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { useParams,Link } from 'react-router-dom';
-
+import WebsiteAdds from '../components/WebsiteAdds.jsx';
 import { Spinner,Button } from 'flowbite-react';
 export default function Post() {
     const[loading,setLoading]=useState(false);
@@ -64,7 +64,10 @@ export default function Post() {
           <div
             className='p-3 max-w-2xl mx-auto w-full post-content'
             dangerouslySetInnerHTML={{ __html: post && post.content }}
-          ></div>
+          >
+
+          </div>
+           <div><WebsiteAdds/></div>
          
 
     
