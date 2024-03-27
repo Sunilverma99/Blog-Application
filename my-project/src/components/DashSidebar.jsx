@@ -6,6 +6,7 @@ import { Sidebar } from 'flowbite-react';
 import { HiArrowSmRight, HiChartPie, HiDocumentText, HiUser } from 'react-icons/hi';
 import { Link } from 'react-router-dom';
 import { setUser } from '../../redux/user/userSlice';
+import { MdGroups2 } from "react-icons/md";
 import toast from 'react-hot-toast';
 export default function DashSidebar() {
     const location = useLocation();
@@ -74,7 +75,7 @@ export default function DashSidebar() {
           <Link to='/dashboard?tab=users'>
             <Sidebar.Item
               active={tab === 'users'}
-              icon={HiDocumentText}
+              icon={MdGroups2 }
               labelColor='dark'
               as='div'
             >
