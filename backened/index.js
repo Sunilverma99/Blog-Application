@@ -6,6 +6,7 @@ import mongoose from 'mongoose';
 import userRouter from"./routes/user.routes.js"
 import authRouter from "./routes/auth.router.js"
 import postRouter from "./routes/post.router.js"
+import commentRouter from "./routes/comment.router.js"
 
 import cors from "cors";
 dotenv.config();
@@ -31,8 +32,8 @@ app.listen(PORT, () => {
 app.use("/api",userRouter)
 app.use("/api",authRouter);
 app.use("/api",postRouter);
+app.use("/api",commentRouter);
 
-app.use
 
 
 
