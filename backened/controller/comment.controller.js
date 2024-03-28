@@ -1,9 +1,7 @@
 import Comment from "../models/comments.model.js"
 import errHandler from "../utlies/error.js"
-import { ObjectId } from "mongoose";
 const createComment=async(req,res,next)=>{
     const { comment, postId, userId } = req.body;
-
     if (userId !== req.user.id) {
       return next(
         errHandler(403, 'You are not allowed to create this comment')
@@ -60,7 +58,6 @@ const editComment=async(req,res,next)=>{
       comment:req.body.comment,
     
     },{new:true});
-    console.log(updatedComment)
     res.status(200).json(updatedComment);
   }catch(error){
     next(error);
@@ -74,8 +71,34 @@ const deleteComment=async(req,res,next)=>{
     }  
      await Comment.findByIdAndDelete(req.params.commentId);
      res.status(200).json("Comment deleted successfully");
-  }catch{
+  }catch(error){
     next(error);
   }
 }
-export {createComment,getAllComments,likeComment,editComment,deleteComment};
+const getComments=async (req,res,next)=>{
+  try{
+    if(!req.user.isAdmin){
+     return next(errHandler(403,"You can not access this route"));
+    }
+    const startIndex = parseInt(req.query.startIndex) || 0;
+    const limit = parseInt(req.query.limit) || 9;
+    const sortDirection = req.query.order === 'asc' ? 1 : -1;
+    const comments=await Comment.find({}).sort({updatedAt:sortDirection}).skip(startIndex).limit(limit);
+    const totalComments=await Comment.countDocuments();
+    const now=new Date();
+    const oneMonthAgo = new Date(
+      now.getFullYear(),
+      now.getMonth() - 1,
+      now.getDate()
+    );
+
+    const lastMonthComments = await Comment.countDocuments({
+      createdAt: { $gte: oneMonthAgo },
+    });
+
+    res.status(200).json({comments,totalComments,lastMonthComments})
+  }catch(error){
+   next(error)
+  }
+}
+export {createComment,getAllComments,likeComment,editComment,deleteComment,getComments};

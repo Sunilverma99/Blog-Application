@@ -7,6 +7,7 @@ import { HiArrowSmRight, HiChartPie, HiDocumentText, HiUser } from 'react-icons/
 import { Link } from 'react-router-dom';
 import { setUser } from '../../redux/user/userSlice';
 import { MdGroups2 } from "react-icons/md";
+import { FaComments } from "react-icons/fa";
 import toast from 'react-hot-toast';
 export default function DashSidebar() {
     const location = useLocation();
@@ -71,7 +72,7 @@ export default function DashSidebar() {
           </Link>
           
 }        
-{  currentUser.isAdmin&&
+{  currentUser.isAdmin&&<>
           <Link to='/dashboard?tab=users'>
             <Sidebar.Item
               active={tab === 'users'}
@@ -82,6 +83,17 @@ export default function DashSidebar() {
               Users
             </Sidebar.Item>
           </Link>
+          <Link to='/dashboard?tab=comments'>
+            <Sidebar.Item
+              active={tab === 'comments'}
+              icon={FaComments }
+              labelColor='dark'
+              as='div'
+            >
+              Comments
+            </Sidebar.Item>
+          </Link>
+          </>
           
 }        
 

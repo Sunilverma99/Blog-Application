@@ -5,6 +5,7 @@ import DashSidebar from '../components/DashSidebar';
 import DashProfile from '../components/DashProfile';
 import DashPosts from '../components/DashPosts.jsx'
 import DashUsers from '../components/DashUsers.jsx';
+import DashComments from '../components/DashComments.jsx';
 
 function Dashbored() {
   const location=useLocation();
@@ -23,7 +24,8 @@ function Dashbored() {
       </div>
       {tab==='profile'&& <DashProfile/>||
       tab==='posts'&& <DashPosts/>||
-      tab==='users'&&<DashUsers/>}
+      tab==='users'&&<DashUsers/>||
+      tab==='comments'&&<DashComments/>}
 
     </div>
   )
