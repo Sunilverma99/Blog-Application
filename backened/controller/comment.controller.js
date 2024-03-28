@@ -30,7 +30,6 @@ const getAllComments=async(req,res,next)=>{
     next(error);
   }
 }
-
  const likeComment = async (req, res, next) => {
   try {
     const comment = await Comment.findById(req.params.commentId);
@@ -53,8 +52,6 @@ const getAllComments=async(req,res,next)=>{
 };
 const editComment=async(req,res,next)=>{
   try{
-    console.log(req.params.commentId);
-    console.log(req.body.comment);
     const currentComment=await Comment.findById(req.params.commentId);
     if(req.user.id!==currentComment.userId||!req.user.isAdmin){
       return next(errHandler(403,"YOu are not allowed to edit this comment"))
@@ -69,4 +66,16 @@ const editComment=async(req,res,next)=>{
     next(error);
   }
 }
-export {createComment,getAllComments,likeComment,editComment};
+const deleteComment=async(req,res,next)=>{
+  try{
+    const currentComment=await Comment.findById(req.params.commentId);
+    if(req.user.id!==currentComment.userId||!req.user.isAdmin){
+      return next(errHandler(403,"You are not allowed to delete this comment"))
+    }  
+     await Comment.findByIdAndDelete(req.params.commentId);
+     res.status(200).json("Comment deleted successfully");
+  }catch{
+    next(error);
+  }
+}
+export {createComment,getAllComments,likeComment,editComment,deleteComment};
