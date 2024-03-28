@@ -17,7 +17,7 @@ const createComment=async(req,res,next)=>{
            comment
         })
         await Content.save();
-        res.status(201).json(comment);
+        res.status(201).json(Content);
     } catch (error) {
         next(error);
     }  

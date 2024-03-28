@@ -5,7 +5,7 @@ import { BiSolidLike } from "react-icons/bi";
 import { useSelector } from 'react-redux';
 import { Textarea,Button } from 'flowbite-react';
 import toast from 'react-hot-toast';
-export default function Comments({comment,LikeComment,editComment}) {
+export default function Comments({comment,LikeComment,editComment,onDelete}) {
     const[user,setUser]=useState(null);
     const{currentUser}=useSelector((state)=>state.user);
     const [isEditing,setIsEditing]=useState(false);
@@ -117,7 +117,7 @@ const handleSave=async()=>{
                     </button>
                     <button
                       type='button'
-                     // onClick={() => onDelete(comment._id)}
+                     onClick={() => onDelete(comment._id)}
                       className='text-gray-400 hover:text-red-500'
                     >
                       Delete
