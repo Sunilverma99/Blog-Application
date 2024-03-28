@@ -51,4 +51,22 @@ const getAllComments=async(req,res,next)=>{
     next(error);
   }
 };
-export {createComment,getAllComments,likeComment};
+const editComment=async(req,res,next)=>{
+  try{
+    console.log(req.params.commentId);
+    console.log(req.body.comment);
+    const currentComment=await Comment.findById(req.params.commentId);
+    if(req.user.id!==currentComment.userId||!req.user.isAdmin){
+      return next(errHandler(403,"YOu are not allowed to edit this comment"))
+    }
+    const updatedComment=await Comment.findByIdAndUpdate(req.params.commentId,{
+      comment:req.body.comment,
+    
+    },{new:true});
+    console.log(updatedComment)
+    res.status(200).json(updatedComment);
+  }catch(error){
+    next(error);
+  }
+}
+export {createComment,getAllComments,likeComment,editComment};

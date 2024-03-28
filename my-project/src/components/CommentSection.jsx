@@ -60,6 +60,14 @@ export default function Comment({postId,currentUser}) {
        toast.error("You can not like this comment")
      }
   }
+  const handleEditComment=async({comment,editiedComment})=>{
+    setComments(
+      comments.map((c) =>
+        c._id === comment._id ? { ...c, comment: editiedComment } : c
+      )
+    );
+    
+  }
   useEffect(()=>{
     const fetchComments=async()=>{
       try {
@@ -76,7 +84,7 @@ export default function Comment({postId,currentUser}) {
       }
     }
     fetchComments();
- },[postId])
+ },[postId,comments])
   return (
     <div className='max-w-2xl mx-auto w-full p-3'>
       {currentUser ? (
@@ -130,7 +138,7 @@ export default function Comment({postId,currentUser}) {
           </div>
         </div>
         {comments.length>0?(comments.map((comment)=>(
-          <Comments key={comment._id} comment={comment} LikeComment={handleLikes}/>
+          <Comments key={comment._id} comment={comment} LikeComment={handleLikes} editComment={handleEditComment}/>
         ))
           ):(<p>No comment yet</p>)}
         </>
