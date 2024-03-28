@@ -44,9 +44,13 @@ export default function DashSidebar() {
     <Sidebar  className='w-full md:w-56'>
       <Sidebar.Items>
         <Sidebar.ItemGroup  className='flex flex-col gap-1'>
-          <Sidebar.Item href="#" icon={HiChartPie}>
-            Dashboard
-          </Sidebar.Item>
+          <Link to='/dashboard?tab=dash'>
+          <Sidebar.Item  icon={HiChartPie}
+          active={tab==='dash'}
+          as='div'
+          >
+            Dashbared
+          </Sidebar.Item></Link>
           
           <Link to='/dashboard?tab=profile'>
             <Sidebar.Item
