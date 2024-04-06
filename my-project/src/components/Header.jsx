@@ -6,13 +6,15 @@ import { useSelector, useDispatch } from 'react-redux';
 import { toggleTheme } from "../../redux/theme/theme.js";
 import { setUser } from '../../redux/user/userSlice.js';
 import toast from 'react-hot-toast';
+import { useEffect, useState } from 'react';
 export default function Header() {
   const path = useLocation().pathname;
  const dispatch=useDispatch();
   const { currentUser } = useSelector((state) => state.user);
   const { theme } = useSelector((state) => state.theme)
-
-
+ const[searchTerm,setSearchTerm]=useState('');
+ const location=useLocation();
+ const navigate=useNavigate();
   const handleSignOut=async()=>{
     try{
       const res=await fetch('/api/user/signout',{
@@ -30,6 +32,24 @@ export default function Header() {
       toast.error(error.message);
     }
   }
+  const handleSubmit=async(e)=>{
+    e.preventDefault();
+    const urlParms=new URLSearchParams(location.search);
+    console.log(urlParms);
+    urlParms.set('searchTerm',searchTerm);
+    console.log(urlParms)
+    const searchQuery=urlParms.toString();
+    console.log(searchQuery)
+    navigate(`/search?${searchQuery}`)
+  }
+  console.log(searchTerm);
+  useEffect(()=>{
+    const urlParms=new URLSearchParams(location.search);
+    const searchTermUrl=urlParms.get('searchTerm');
+    if(searchTermUrl){
+      setSearchTerm(searchTermUrl);
+    }
+  },[location.search])
 
   return (
     <Navbar className='border-b-2 w-screen  px-10'>
@@ -38,14 +58,16 @@ export default function Header() {
       Sunil's
     </span>Blog
   </Link>
-  <form>
+  <form onSubmit={handleSubmit}>
     <TextInput 
       type='text'
       placeholder='Search...'
       className='hidden lg:inline  '
+      value={searchTerm}
+      onChange={(e)=>setSearchTerm(e.target.value)}
     />
   </form>
-  <Button className='w-12 h-10 lg:hidden' color='gray' pill>
+  <Button type='submit' className='w-12 h-10 lg:hidden' color='gray' pill>
     <AiOutlineSearch />
   </Button>
   <div className='flex gap-2 md:order-2 py-1'>

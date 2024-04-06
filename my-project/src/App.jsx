@@ -13,6 +13,7 @@ import CreatePost from './pages/CreatePost.jsx';
 import UpdatePost from './pages/UpdatePost.jsx';
 import { Toaster } from 'react-hot-toast';
 import Post from './pages/Post.jsx';
+import Search from './pages/Search.jsx';
 function App() {
   return (
     <BrowserRouter>
@@ -22,6 +23,7 @@ function App() {
        <Route  path="/projects" element={<Projects/>}/>
        <Route  path="/sign-in" element={<Signin/>}/>
        <Route  path="/sign-up" element={<Signup/>}/>
+       <Route  path="/search" element={<Search/>}/>
        <Route  element={<PrivateRoute/>}>
        <Route  path="/dashboard" element={<Dashbord/>}/>
        </Route>
