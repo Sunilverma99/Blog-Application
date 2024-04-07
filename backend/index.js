@@ -9,6 +9,7 @@ import postRouter from "./routes/post.router.js"
 import commentRouter from "./routes/comment.router.js"
 import clientRouter from "./routes/client.router.js"
 import cors from "cors";
+import path from "path";
 dotenv.config();
 const PORT = process.env.PORT || 5000;
 const app = express();
@@ -21,6 +22,7 @@ mongoose.connect(process.env.MONGO, {
 }).catch((err) => {
   console.error("Error connecting to MongoDB:", err);
 });
+const __dirname=path.resolve();
 
 app.use(express.json());
 app.use(cookieParser());
@@ -35,7 +37,10 @@ app.use("/api",postRouter);
 app.use("/api",commentRouter);
 app.use("/api",clientRouter)
 
-
+app.use(express.static(path.join(__dirname,"/my-project/dist")))
+app.get("*",(req,res)=>{
+   res.sendFile(path.join(__dirname,"my-project","dist","index.html"))
+});
 app.use((err,req,res,next)=>{
      const statusCode=err.statusCode ||500;
      const message=err.message || "Internal Server Error";

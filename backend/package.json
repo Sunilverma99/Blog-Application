@@ -5,7 +5,9 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start":"node backend/index.js",
+    "build":"npm install && npm install --prefix my-project && npm run build --prefix my-project"
   },
   "author": "sunil",
   "license": "ISC",
