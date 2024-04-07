@@ -7,7 +7,7 @@ import userRouter from"./routes/user.routes.js"
 import authRouter from "./routes/auth.router.js"
 import postRouter from "./routes/post.router.js"
 import commentRouter from "./routes/comment.router.js"
-
+import clientRouter from "./routes/client.router.js"
 import cors from "cors";
 dotenv.config();
 const PORT = process.env.PORT || 5000;
@@ -33,13 +33,7 @@ app.use("/api",userRouter)
 app.use("/api",authRouter);
 app.use("/api",postRouter);
 app.use("/api",commentRouter);
-
-
-
-
-
-
-
+app.use("/api",clientRouter)
 
 
 app.use((err,req,res,next)=>{

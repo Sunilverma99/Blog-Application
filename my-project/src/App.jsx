@@ -1,7 +1,7 @@
 import React from 'react'
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Home from './pages/Home.jsx';
-import Projects from './pages/Projects.jsx'
+import Contact from './pages/Contact.jsx'
 import Signin from './pages/Sign-in';
 import Signup from './pages/Signup.jsx'
 import Dashbord from './pages/Dashbored.jsx'
@@ -14,16 +14,18 @@ import UpdatePost from './pages/UpdatePost.jsx';
 import { Toaster } from 'react-hot-toast';
 import Post from './pages/Post.jsx';
 import Search from './pages/Search.jsx';
+import About from './pages/About.jsx';
 function App() {
   return (
     <BrowserRouter>
     <Header/>
     <Routes>
        <Route  path="/" element={<Home/>}/>
-       <Route  path="/projects" element={<Projects/>}/>
+       <Route  path="/contact" element={<Contact/>}/>
        <Route  path="/sign-in" element={<Signin/>}/>
        <Route  path="/sign-up" element={<Signup/>}/>
        <Route  path="/search" element={<Search/>}/>
+       <Route  path="/about" element={<About/>}/>
        <Route  element={<PrivateRoute/>}>
        <Route  path="/dashboard" element={<Dashbord/>}/>
        </Route>

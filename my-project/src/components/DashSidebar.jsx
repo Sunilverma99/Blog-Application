@@ -45,13 +45,13 @@ export default function DashSidebar() {
       <Sidebar.Items>
         <Sidebar.ItemGroup  className='flex flex-col gap-1'>
           <Link to='/dashboard?tab=dash'>
-          <Sidebar.Item  icon={HiChartPie}
-          active={tab==='dash'}
-          as='div'
-          >
-            Dashbared
-          </Sidebar.Item></Link>
-          
+            {currentUser.isAdmin &&
+             <Sidebar.Item  icon={HiChartPie}
+             active={tab==='dash'}
+             as='div'
+             >
+               Dashborad
+             </Sidebar.Item>}</Link>
           <Link to='/dashboard?tab=profile'>
             <Sidebar.Item
               active={tab === 'profile'}

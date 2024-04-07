@@ -24,7 +24,7 @@ const postSchema=mongoose.Schema({
     },
     photoUrl:{
         type:String,
-        default:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRec71aR6uwcdvTH4I3EIDlH0EmBLhx4iX2cA&usqp=CAU"
+        default:"https://images.pexels.com/photos/837358/pexels-photo-837358.jpeg?auto=compress&cs=tinysrgb&w=600"
     }
 },{timestamps:true});
 const Post=mongoose.model("Post",postSchema);
