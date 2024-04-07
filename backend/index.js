@@ -11,7 +11,7 @@ import clientRouter from "./routes/client.router.js"
 import cors from "cors";
 import path from "path";
 dotenv.config();
-const PORT = process.env.PORT || 5000;
+const PORT =  5000;
 const app = express();
 
 mongoose.connect(process.env.MONGO, {
