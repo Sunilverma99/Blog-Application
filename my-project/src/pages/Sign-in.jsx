@@ -76,12 +76,12 @@ function Signin() {
               onChange={(e)=>setPassword(e.target.value)}
             />
              <Button type='submit' outline  gradientDuoTone="purpleToPink" >
-        Sign up
+        Sign in
       </Button >
       <OAuth/>
       <div className='flex gap-2'>
         <span>Have an account ?</span>
-        <Link to='/sign-in'>Sign-up</Link>
+        <Link to='/sign-up'>Sign-up</Link>
       </div>
       
           </form>
