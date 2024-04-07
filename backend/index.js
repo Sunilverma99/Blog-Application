@@ -9,7 +9,7 @@ import postRouter from "./routes/post.router.js"
 import commentRouter from "./routes/comment.router.js"
 import clientRouter from "./routes/client.router.js"
 import cors from "cors";
-import path from "path";
+
 dotenv.config();
 const PORT =  5000;
 const app = express();
