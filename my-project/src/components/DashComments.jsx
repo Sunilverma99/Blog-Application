@@ -70,7 +70,7 @@ export default function DashComments() {
         const data=await res.json();
         console.log(data)
         if(res.ok){
-          toast.success("Post Deleted Successfully");
+          toast.success("Comment Deleted Successfully");
           setComments(comments.filter(comment=>comment._id!==deleteCommentId));
         }else{
           toast.error("Failed to delete comment");
